@@ -1,11 +1,16 @@
 #include <SFML/Graphics.hpp>
 
+#include "Game.h"
+
 using namespace sf;
 
-int main()
-{
 
-    RenderWindow window(VideoMode(400, 400), L"Новый проект", Style::Default);
+int main(int argc, char* argv[])
+{
+    Game game;
+    game.run(1);
+
+    /*RenderWindow window(VideoMode(400, 400), L"Новый проект", Style::Default);
 
     window.setVerticalSyncEnabled(true);
 
@@ -25,6 +30,6 @@ int main()
         window.clear(Color::Blue);
         window.draw(shape);
         window.display();
-    }
+    }*/
     return 0;
 }
