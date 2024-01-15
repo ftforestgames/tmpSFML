@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "ResourceHolder.h"
 
 using namespace sf;
 using namespace std;
@@ -8,6 +8,8 @@ Game::Game()
 	: mWindow(sf::VideoMode(640, 480), "SFML Application")
 	, mTexture()
 	, mPlayer()
+	, airplane()
+	, landscape()
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()
@@ -17,18 +19,16 @@ Game::Game()
 	, mIsMovingRight(false)
 	, mIsMovingLeft(false)
 {
+	// Try to load resources
+	
 
-	sf::Image heroimage; //создаем объект Image (изображение)
-	heroimage.loadFromFile("images/eagle.png");//загружаем в него файл
+	//sf::Image heroimage; //создаем объект Image (изображение)
+	//heroimage.loadFromFile("images/eagle.png");//загружаем в него файл
 
-	mTexture.loadFromImage(heroimage);//передаем в него объект Image (изображения)
-
-	//if (!mTexture.loadFromFile("/media/textures/eagle.png"))
-	//{
-	//	// Handle loading error
-	//}
-	mPlayer.setTexture(mTexture);
-	mPlayer.setPosition(100.f, 100.f);
+	//mTexture.loadFromImage(heroimage);//передаем в него объект Image (изображения)
+	//
+	//mPlayer.setTexture(mTexture);
+	//mPlayer.setPosition(100.f, 100.f);
 
 	mFont.loadFromFile("media/sansation.ttf");
 	mStatisticsText.setFont(mFont);
@@ -47,6 +47,24 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
+	ResourceHolder<sf::Texture, Textures::ID> textures;
+	try
+	{
+		textures.load(Textures::Landscape, "images/desert.png");
+		textures.load(Textures::Airplane, "images/eagle.png");
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << "Exception: " << e.what() << std::endl;
+		return;
+	}
+
+	// Access resources
+	airplane.setTexture(textures.get(Textures::Airplane));
+	landscape.setTexture(textures.get(Textures::Landscape));
+	airplane.setPosition(200.f, 200.f);
+
 	while (mWindow.isOpen())
 	{
 		processEvents();
@@ -113,7 +131,9 @@ void Game::updateStatistics(sf::Time elapsedTime)
 void Game::render()
 {
 	mWindow.clear();
-	mWindow.draw(mPlayer);
+	//mWindow.draw(mPlayer);
+	mWindow.draw(landscape);
+	mWindow.draw(airplane);
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }

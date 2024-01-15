@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Game.h"
+#include "ResourceHolder.h"
 
 using namespace sf;
 using namespace std;

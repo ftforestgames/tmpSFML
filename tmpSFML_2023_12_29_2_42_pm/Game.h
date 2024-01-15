@@ -1,9 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <filesystem>
-#include <iostream>
-#include <sstream>
+#include "libs.h"
+
 
 using namespace sf;
 using namespace std;
@@ -36,4 +33,6 @@ private:
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;
 	int mStatisticsNumFrames;
+	sf::Sprite airplane;
+	sf::Sprite landscape;
 };
