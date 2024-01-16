@@ -1,11 +1,12 @@
 #pragma once
 #include "libs.h"
 
+#include "World.h"
 
 using namespace sf;
 using namespace std;
 
-class Game
+class Game : private sf::NonCopyable
 {
 public:
 	Game();
@@ -20,19 +21,18 @@ private:
 	template <typename T>
 	std::string toString(const T& value);
 private:
-	sf::RenderWindow mWindow;
-	sf::Texture mTexture;
-	sf::Sprite mPlayer;
-	bool mIsMovingUp;
-	bool mIsMovingDown;
-	bool mIsMovingLeft;
-	bool mIsMovingRight;
-	float PlayerSpeed = 100.f;
-	sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
-	sf::Font mFont;
-	sf::Text mStatisticsText;
-	sf::Time mStatisticsUpdateTime;
-	int mStatisticsNumFrames;
-	sf::Sprite airplane;
-	sf::Sprite landscape;
+	
+	
+	//sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
+	
+
+	static const sf::Time	TimePerFrame;
+
+	sf::RenderWindow		mWindow;
+	World					mWorld;
+
+	sf::Font				mFont;
+	sf::Text				mStatisticsText;
+	sf::Time				mStatisticsUpdateTime;
+	std::size_t				mStatisticsNumFrames;
 };

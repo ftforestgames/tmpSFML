@@ -4,20 +4,15 @@
 using namespace sf;
 using namespace std;
 
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+
 Game::Game()
-	: mWindow(sf::VideoMode(640, 480), "SFML Application")
-	, mTexture()
-	, mPlayer()
-	, airplane()
-	, landscape()
+	: mWindow(sf::VideoMode(640, 480), "World", sf::Style::Close)
+	, mWorld(mWindow)
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()
 	, mStatisticsNumFrames(0)
-	, mIsMovingUp(false)
-	, mIsMovingDown(false)
-	, mIsMovingRight(false)
-	, mIsMovingLeft(false)
 {
 	// Try to load resources
 	
@@ -48,22 +43,6 @@ void Game::run()
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-	ResourceHolder<sf::Texture, Textures::ID> textures;
-	try
-	{
-		textures.load(Textures::Landscape, "images/desert.png");
-		textures.load(Textures::Airplane, "images/eagle.png");
-	}
-	catch (std::runtime_error& e)
-	{
-		std::cout << "Exception: " << e.what() << std::endl;
-		return;
-	}
-
-	// Access resources
-	airplane.setTexture(textures.get(Textures::Airplane));
-	landscape.setTexture(textures.get(Textures::Landscape));
-	airplane.setPosition(200.f, 200.f);
 
 	while (mWindow.isOpen())
 	{
@@ -100,16 +79,7 @@ void Game::processEvents()
 }
 void Game::update(sf::Time deltaTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
-		movement.y -= PlayerSpeed;
-	if (mIsMovingDown)
-		movement.y += PlayerSpeed;
-	if (mIsMovingLeft)
-		movement.x -= PlayerSpeed;
-	if (mIsMovingRight)
-		movement.x += PlayerSpeed;
-	mPlayer.move(movement * deltaTime.asSeconds());
+	mWorld.update(deltaTime);
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
@@ -131,21 +101,14 @@ void Game::updateStatistics(sf::Time elapsedTime)
 void Game::render()
 {
 	mWindow.clear();
-	//mWindow.draw(mPlayer);
-	mWindow.draw(landscape);
-	mWindow.draw(airplane);
+	mWorld.draw();
+
+	mWindow.setView(mWindow.getDefaultView());
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
 void Game::handlePlayerInput(sf::Keyboard::Key key,
 	bool isPressed)
 {
-	if (key == sf::Keyboard::W)
-		mIsMovingUp = isPressed;
-	else if (key == sf::Keyboard::S)
-		mIsMovingDown = isPressed;
-	else if (key == sf::Keyboard::A)
-		mIsMovingLeft = isPressed;
-	else if (key == sf::Keyboard::D)
-		mIsMovingRight = isPressed;
+	
 }

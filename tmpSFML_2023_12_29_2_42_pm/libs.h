@@ -9,7 +9,7 @@
 using namespace sf;
 using namespace std;
 
-namespace Textures
-{
-	enum ID { Landscape, Airplane, Missile };
-}
+//namespace Textures
+//{
+//	enum ID { Landscape, Airplane, Missile };
+//}
