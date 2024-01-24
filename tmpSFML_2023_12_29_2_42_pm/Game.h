@@ -1,5 +1,7 @@
 #pragma once
 #include "libs.h"
+#include "Player.h"
+
 
 #include "World.h"
 
@@ -12,12 +14,11 @@ public:
 	Game();
 	void run();
 private:
-	void processEvents();
-	void update(sf::Time deltaTime);
+	void	processEvents();
 	void render();
-	void handlePlayerInput(sf::Keyboard::Key key,
-		bool isPressed);
+	void processInput();
 	void updateStatistics(sf::Time elapsedTime);
+	void update(sf::Time elapsedTime);
 	template <typename T>
 	std::string toString(const T& value);
 private:
@@ -30,9 +31,15 @@ private:
 
 	sf::RenderWindow		mWindow;
 	World					mWorld;
+	Player					mPlayer;
 
 	sf::Font				mFont;
 	sf::Text				mStatisticsText;
 	sf::Time				mStatisticsUpdateTime;
 	std::size_t				mStatisticsNumFrames;
+
+	bool					mIsMovingUp;
+	bool					mIsMovingDown;
+	bool					mIsMovingLeft;
+	bool					mIsMovingRight;
 };

@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "ResourceHolder.h"
+#include "CommandQueue.h"
 
 using namespace sf;
 using namespace std;
@@ -42,41 +43,38 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-
-
 	while (mWindow.isOpen())
 	{
-		processEvents();
-		timeSinceLastUpdate += clock.restart();
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			timeSinceLastUpdate -= TimePerFrame;
-			processEvents();
+
+			processInput();
 			update(TimePerFrame);
 		}
-		updateStatistics(TimePerFrame);
+
+		updateStatistics(elapsedTime);
 		render();
 	}
 }
-void Game::processEvents()
+void Game::processInput()
 {
+	CommandQueue& commands = mWorld.getCommandQueue();
+
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
-		switch (event.type)
-		{
-		case sf::Event::KeyPressed:
-			handlePlayerInput(event.key.code, true);
-			break;
-		case sf::Event::KeyReleased:
-			handlePlayerInput(event.key.code, false);
-			break;
-		case sf::Event::Closed:
+		mPlayer.handleEvent(event, commands);
+
+		if (event.type == sf::Event::Closed)
 			mWindow.close();
-			break;
-		}
 	}
+
+	mPlayer.handleRealtimeInput(commands);
 }
+
 void Game::update(sf::Time deltaTime)
 {
 	mWorld.update(deltaTime);
@@ -106,9 +104,4 @@ void Game::render()
 	mWindow.setView(mWindow.getDefaultView());
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
-}
-void Game::handlePlayerInput(sf::Keyboard::Key key,
-	bool isPressed)
-{
-	
 }

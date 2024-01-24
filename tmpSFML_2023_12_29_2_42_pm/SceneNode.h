@@ -1,5 +1,7 @@
 #pragma once
 #include "libs.h"
+#include "Command.h"
+#include "Category.h"
 
 class SceneNode :
 	public sf::Transformable, public sf::Drawable, private sf::NonCopyable
@@ -11,8 +13,12 @@ public:
 	void attachChild(Ptr child);
 	Ptr detachChild(const SceneNode& node);
 	void update(sf::Time dt);
+
 	sf::Vector2f			getWorldPosition() const;
 	sf::Transform			getWorldTransform() const;
+
+	void					onCommand(const Command& command, sf::Time dt);
+	virtual unsigned int	getCategory() const;
 private:
 	virtual void draw(sf::RenderTarget& target,
 		sf::RenderStates states) const;
