@@ -6,6 +6,8 @@ Textures::ID toTextureID(Ground::Type type)
 	{
 		case Ground::Submarine:
 			return Textures::Submarine;
+		case Ground::Tank:
+			return Textures::Tank;
 
 		return Textures::Submarine;
 	}

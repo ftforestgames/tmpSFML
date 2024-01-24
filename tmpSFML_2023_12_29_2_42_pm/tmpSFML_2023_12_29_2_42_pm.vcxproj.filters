@@ -85,6 +85,9 @@
     <Image Include="images\submarine.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="images\tank.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceHolder.inl">

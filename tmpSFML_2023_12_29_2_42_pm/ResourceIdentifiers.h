@@ -14,6 +14,7 @@ namespace Textures
 		Raptor,
 		Desert,
 		Submarine,
+		Tank,
 	};
 }
 

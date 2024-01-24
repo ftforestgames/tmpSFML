@@ -27,6 +27,7 @@ void World::loadTextures()
 	mTextures.load(Textures::Raptor, "images/raptor.png");
 	mTextures.load(Textures::Desert, "images/desert.png");
 	mTextures.load(Textures::Submarine, "images/submarine.png");
+	mTextures.load(Textures::Tank, "images/tank.png");
 }
 
 void World::update(sf::Time dt)
@@ -34,6 +35,10 @@ void World::update(sf::Time dt)
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
 	sf::Vector2f position = mPlayerAircraft->getPosition();
 	sf::Vector2f velocity = mPlayerAircraft->getVelocity();
+
+	/*velocity.y = velocity.y * dt.asSeconds();
+	mPlayerAircraft->setVelocity(velocity);*/
+
 	if (position.x <= mWorldBounds.left + 150
 		|| position.x >= mWorldBounds.left + mWorldBounds.width - 150)
 	{
@@ -71,12 +76,20 @@ void World::buildScene()
 	backgroundSprite->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mSceneLayers[Background]->attachChild(std::move(backgroundSprite));
 
-	// Add ground enemy
+	// Add ground enemy ground
 	std::unique_ptr<Ground> enemy(new Ground(Ground::Submarine, mTextures));
 	mEnemy = enemy.get();
 	mEnemy->setPosition(mSpawnPosition);
-	mEnemy->setVelocity(0.f, mScrollSpeed);
+	mEnemy->setVelocity(0.f, mScrollSpeed + 30.f);
 	mSceneLayers[GroundEnemy]->attachChild(std::move(enemy));
+
+	// Add ground enemy ground
+	std::unique_ptr<Ground> enemyTanks(new Ground(Ground::Tank, mTextures));
+	mEnemy = enemyTanks.get();
+	mEnemy->setPosition(mWorldView.getSize().x / 2.f - 100, mWorldBounds.height - mWorldView.getSize().y / 2.f);
+	mEnemy->setVelocity(0.f, mScrollSpeed + 10.f);
+	mSceneLayers[GroundEnemy]->attachChild(std::move(enemyTanks));
+
 
 	// Add player's aircraft
 	std::unique_ptr<Aircraft> leader(new Aircraft(Aircraft::Eagle, mTextures));

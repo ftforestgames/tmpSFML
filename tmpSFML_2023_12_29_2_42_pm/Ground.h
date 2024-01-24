@@ -10,6 +10,7 @@ public:
 	enum Type
 	{
 		Submarine,
+		Tank,
 	};
 public:
 	Ground(Type type, const TextureHolder& textures);
