@@ -1,5 +1,7 @@
-#pragma once
-#include "Command.h"
+#ifndef BOOK_PLAYER_HPP
+#define BOOK_PLAYER_HPP
+
+#include <Book/Command.hpp>
 
 #include <SFML/Window/Event.hpp>
 
@@ -40,3 +42,5 @@ private:
 	std::map<sf::Keyboard::Key, Action>		mKeyBinding;
 	std::map<Action, Command>				mActionBinding;
 };
+
+#endif // BOOK_PLAYER_HPP

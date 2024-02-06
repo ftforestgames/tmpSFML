@@ -1,6 +1,8 @@
-#include "Aircraft.h"
-#include "Category.h"
+#include <Book/Aircraft.hpp>
+#include <Book/ResourceHolder.hpp>
 
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
 
 Textures::ID toTextureID(Aircraft::Type type)

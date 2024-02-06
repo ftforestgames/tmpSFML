@@ -104,7 +104,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>I:\SFML\Docs\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>I:\SFML\projects\tmpSFML\tmpSFML_2023_12_29_2_42_pm;I:\SFML\Docs\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +123,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>I:\SFML\projects\tmpSFML\tmpSFML_2023_12_29_2_42_pm;</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,13 +135,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
-    <ClCompile Include="Category.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SpriteNode.cpp" />
@@ -150,25 +151,45 @@
     <Image Include="images\raptor.png" />
     <Image Include="images\submarine.png" />
     <Image Include="images\tank.png" />
+    <Image Include="Media\Textures\Desert.png" />
+    <Image Include="Media\Textures\Eagle.png" />
+    <Image Include="Media\Textures\Raptor.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Aircraft.h" />
-    <ClInclude Include="Category.h" />
-    <ClInclude Include="Command.h" />
-    <ClInclude Include="CommandQueue.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Ground.h" />
-    <ClInclude Include="libs.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="ResourceHolder.h" />
-    <ClInclude Include="ResourceIdentifiers.h" />
-    <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="SpriteNode.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="Book\Aircraft.hpp" />
+    <ClInclude Include="Book\Application.hpp" />
+    <ClInclude Include="Book\Category.hpp" />
+    <ClInclude Include="Book\Command.hpp" />
+    <ClInclude Include="Book\CommandQueue.hpp" />
+    <ClInclude Include="Book\Entity.hpp" />
+    <ClInclude Include="Book\Foreach.hpp" />
+    <ClInclude Include="Book\Game.hpp" />
+    <ClInclude Include="Book\GameState.hpp" />
+    <ClInclude Include="Book\Ground.hpp" />
+    <ClInclude Include="Book\libs.hpp" />
+    <ClInclude Include="Book\LoadingState.hpp" />
+    <ClInclude Include="Book\MenuState.hpp" />
+    <ClInclude Include="Book\ParallelTask.hpp" />
+    <ClInclude Include="Book\PauseState.hpp" />
+    <ClInclude Include="Book\Player.hpp" />
+    <ClInclude Include="Book\ResourceHolder.hpp" />
+    <ClInclude Include="Book\ResourceIdentifiers.hpp" />
+    <ClInclude Include="Book\SceneNode.hpp" />
+    <ClInclude Include="Book\SpriteNode.hpp" />
+    <ClInclude Include="Book\StateIdentifiers.hpp" />
+    <ClInclude Include="Book\StateStack.hpp" />
+    <ClInclude Include="Book\TitleState.hpp" />
+    <ClInclude Include="Book\Utility.hpp" />
+    <ClInclude Include="Book\World.hpp" />
+    <ClInclude Include="StringHelpers.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ResourceHolder.inl" />
+    <None Include="Book\ResourceHolder.inl" />
+    <None Include="Book\StringHelpers.inl" />
+    <None Include="Book\Utility.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Media\Sansation.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

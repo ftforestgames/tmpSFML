@@ -1,6 +1,9 @@
-#pragma once
+#ifndef BOOK_COMMANDQUEUE_HPP
+#define BOOK_COMMANDQUEUE_HPP
+
+#include <Book/Command.hpp>
+
 #include <queue>
-#include "Command.h"
 
 
 class CommandQueue
@@ -14,3 +17,5 @@ public:
 private:
 	std::queue<Command>			mQueue;
 };
+
+#endif // BOOK_COMMANDQUEUE_HPP

@@ -1,5 +1,5 @@
-#include "Command.h"
-#include "Category.h"
+#include <Book/Command.hpp>
+
 
 Command::Command()
 	: action()

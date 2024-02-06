@@ -1,8 +1,7 @@
-#include "Player.h"
-#include "CommandQueue.h"
-#include "Aircraft.h"
-#include "Foreach.h"
-#include "Category.h"
+#include <Book/Player.hpp>
+#include <Book/CommandQueue.hpp>
+#include <Book/Aircraft.hpp>
+#include <Book/Foreach.hpp>
 
 #include <map>
 #include <string>

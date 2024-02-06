@@ -1,8 +1,12 @@
-#pragma once
+#ifndef BOOK_COMMAND_HPP
+#define BOOK_COMMAND_HPP
+
+#include <Book/Category.hpp>
+
+#include <SFML/System/Time.hpp>
+
 #include <functional>
 #include <cassert>
-
-#include "libs.h"
 
 
 class SceneNode;
@@ -27,3 +31,5 @@ std::function<void(SceneNode&, sf::Time)> derivedAction(Function fn)
 			fn(static_cast<GameObject&>(node), dt);
 		};
 }
+
+#endif // BOOK_COMMAND_HPP

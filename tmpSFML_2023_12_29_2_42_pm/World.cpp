@@ -1,5 +1,10 @@
+#include <Book/World.hpp>
 
-#include "World.h"
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <algorithm>
+#include <cmath>
+
 
 World::World(sf::RenderWindow& window)
 	: mWindow(window)
@@ -11,23 +16,12 @@ World::World(sf::RenderWindow& window)
 	, mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 	, mScrollSpeed(-50.f)
 	, mPlayerAircraft(nullptr)
-	, mEnemy()
 {
 	loadTextures();
 	buildScene();
 
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
-}
-
-
-void World::loadTextures()
-{
-	mTextures.load(Textures::Eagle, "images/eagle.png");
-	mTextures.load(Textures::Raptor, "images/raptor.png");
-	mTextures.load(Textures::Desert, "images/desert.png");
-	mTextures.load(Textures::Submarine, "images/submarine.png");
-	mTextures.load(Textures::Tank, "images/tank.png");
 }
 
 void World::update(sf::Time dt)
@@ -57,7 +51,12 @@ CommandQueue& World::getCommandQueue()
 	return mCommandQueue;
 }
 
-
+void World::loadTextures()
+{
+	mTextures.load(Textures::Eagle, "Media/Textures/Eagle.png");
+	mTextures.load(Textures::Raptor, "Media/Textures/Raptor.png");
+	mTextures.load(Textures::Desert, "Media/Textures/Desert.png");
+}
 
 void World::buildScene()
 {
@@ -80,36 +79,11 @@ void World::buildScene()
 	backgroundSprite->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mSceneLayers[Background]->attachChild(std::move(backgroundSprite));
 
-	// Add ground enemy ground
-	std::unique_ptr<Ground> enemy(new Ground(Ground::Submarine, mTextures));
-	mEnemy = enemy.get();
-	mEnemy->setPosition(mSpawnPosition);
-	mEnemy->setVelocity(0.f, mScrollSpeed + 30.f);
-	mSceneLayers[GroundEnemy]->attachChild(std::move(enemy));
-
-	// Add ground enemy ground
-	std::unique_ptr<Ground> enemyTanks(new Ground(Ground::Tank, mTextures));
-	mEnemy = enemyTanks.get();
-	mEnemy->setPosition(mWorldView.getSize().x / 2.f - 100, mWorldBounds.height - mWorldView.getSize().y / 2.f);
-	mEnemy->setVelocity(0.f, mScrollSpeed + 10.f);
-	mSceneLayers[GroundEnemy]->attachChild(std::move(enemyTanks));
-
-
 	// Add player's aircraft
 	std::unique_ptr<Aircraft> leader(new Aircraft(Aircraft::Eagle, mTextures));
 	mPlayerAircraft = leader.get();
 	mPlayerAircraft->setPosition(mSpawnPosition);
-	//mPlayerAircraft->setVelocity(40.f, mScrollSpeed);
 	mSceneLayers[Air]->attachChild(std::move(leader));
-
-	// Add two escorting aircrafts, placed relatively to the main plane
-	std::unique_ptr<Aircraft> leftEscort(new Aircraft(Aircraft::Raptor, mTextures));
-	leftEscort->setPosition(-80.f, 50.f);
-	mPlayerAircraft->attachChild(std::move(leftEscort));
-
-	std::unique_ptr<Aircraft> rightEscort(new Aircraft(Aircraft::Raptor, mTextures));
-	rightEscort->setPosition(80.f, 50.f);
-	mPlayerAircraft->attachChild(std::move(rightEscort));
 }
 
 void World::adaptPlayerPosition()

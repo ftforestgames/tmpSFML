@@ -1,5 +1,9 @@
-#include "SceneNode.h"
-#include "Foreach.h"
+#include <Book/SceneNode.hpp>
+#include <Book/Command.hpp>
+#include <Book/Foreach.hpp>
+
+#include <algorithm>
+#include <cassert>
 
 
 SceneNode::SceneNode()
@@ -7,6 +11,7 @@ SceneNode::SceneNode()
 	, mParent(nullptr)
 {
 }
+
 void SceneNode::attachChild(Ptr child)
 {
 	child->mParent = this;
@@ -15,8 +20,7 @@ void SceneNode::attachChild(Ptr child)
 
 SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
 {
-	auto found = std::find_if(mChildren.begin(), mChildren.end(),
-		[&](Ptr& p) -> bool { return p.get() == &node; });
+	auto found = std::find_if(mChildren.begin(), mChildren.end(), [&](Ptr& p) { return p.get() == &node; });
 	assert(found != mChildren.end());
 
 	Ptr result = std::move(*found);
@@ -25,17 +29,31 @@ SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
 	return result;
 }
 
-void SceneNode::draw(sf::RenderTarget& target,
-	sf::RenderStates states) const
+void SceneNode::update(sf::Time dt)
 {
-	states.transform *= getTransform();
-	drawCurrent(target, states);
+	updateCurrent(dt);
+	updateChildren(dt);
+}
 
-	for (auto itr = mChildren.begin();
-		itr != mChildren.end(); ++itr)
-	{
-		(*itr)->draw(target, states);
-	}
+void SceneNode::updateCurrent(sf::Time)
+{
+	// Do nothing by default
+}
+
+void SceneNode::updateChildren(sf::Time dt)
+{
+	FOREACH(Ptr & child, mChildren)
+		child->update(dt);
+}
+
+void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	// Apply transform of current node
+	states.transform *= getTransform();
+
+	// Draw node and children with changed transform
+	drawCurrent(target, states);
+	drawChildren(target, states);
 }
 
 void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const
@@ -43,32 +61,27 @@ void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const
 	// Do nothing by default
 }
 
-void SceneNode::update(sf::Time dt)
+void SceneNode::drawChildren(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	updateCurrent(dt);
-	updateChildren(dt);
+	FOREACH(const Ptr & child, mChildren)
+		child->draw(target, states);
 }
-void SceneNode::updateCurrent(sf::Time)
+
+sf::Vector2f SceneNode::getWorldPosition() const
 {
-}
-void SceneNode::updateChildren(sf::Time dt)
-{
-	FOREACH(Ptr & child, mChildren)
-		child->update(dt);
+	return getWorldTransform() * sf::Vector2f();
 }
 
 sf::Transform SceneNode::getWorldTransform() const
 {
 	sf::Transform transform = sf::Transform::Identity;
-		for (const SceneNode* node = this;
-			node != nullptr; node = node->mParent)
-			transform = node->getTransform() * transform;
+
+	for (const SceneNode* node = this; node != nullptr; node = node->mParent)
+		transform = node->getTransform() * transform;
+
 	return transform;
 }
-sf::Vector2f SceneNode::getWorldPosition() const
-{
-	return getWorldTransform() * sf::Vector2f();
-}
+
 void SceneNode::onCommand(const Command& command, sf::Time dt)
 {
 	// Command current node, if category matches

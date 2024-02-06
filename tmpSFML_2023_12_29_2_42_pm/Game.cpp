@@ -1,44 +1,26 @@
-#include "Game.h"
-#include "ResourceHolder.h"
-#include "CommandQueue.h"
+#include <Book/Game.hpp>
+#include <Book/StringHelpers.hpp>
 
-using namespace sf;
-using namespace std;
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-	: mWindow(sf::VideoMode(640, 480), "World", sf::Style::Close)
+	: mWindow(sf::VideoMode(640, 480), "Input", sf::Style::Close)
 	, mWorld(mWindow)
+	, mPlayer()
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()
 	, mStatisticsNumFrames(0)
 {
-	// Try to load resources
-	
+	mWindow.setKeyRepeatEnabled(false);
 
-	//sf::Image heroimage; //создаем объект Image (изображение)
-	//heroimage.loadFromFile("images/eagle.png");//загружаем в него файл
-
-	//mTexture.loadFromImage(heroimage);//передаем в него объект Image (изображения)
-	//
-	//mPlayer.setTexture(mTexture);
-	//mPlayer.setPosition(100.f, 100.f);
-
-	mFont.loadFromFile("media/sansation.ttf");
+	mFont.loadFromFile("Media/Sansation.ttf");
 	mStatisticsText.setFont(mFont);
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(10);
-	mStatisticsText.setFillColor(Color::Green);
 }
-template <typename T>
-std::string Game::toString(const T& value)
-{
-	std::stringstream stream;
-	stream << value;
-	return stream.str();
-}
+
 void Game::run()
 {
 	sf::Clock clock;
@@ -59,6 +41,7 @@ void Game::run()
 		render();
 	}
 }
+
 void Game::processInput()
 {
 	CommandQueue& commands = mWorld.getCommandQueue();
@@ -75,9 +58,19 @@ void Game::processInput()
 	mPlayer.handleRealtimeInput(commands);
 }
 
-void Game::update(sf::Time deltaTime)
+void Game::update(sf::Time elapsedTime)
 {
-	mWorld.update(deltaTime);
+	mWorld.update(elapsedTime);
+}
+
+void Game::render()
+{
+	mWindow.clear();
+	mWorld.draw();
+
+	mWindow.setView(mWindow.getDefaultView());
+	mWindow.draw(mStatisticsText);
+	mWindow.display();
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
@@ -94,14 +87,4 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
-}
-
-void Game::render()
-{
-	mWindow.clear();
-	mWorld.draw();
-
-	mWindow.setView(mWindow.getDefaultView());
-	mWindow.draw(mStatisticsText);
-	mWindow.display();
 }
