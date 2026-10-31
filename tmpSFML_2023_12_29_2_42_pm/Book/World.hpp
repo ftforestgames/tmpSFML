@@ -62,6 +62,7 @@ private:
 	sf::Vector2f						mSpawnPosition;
 	float								mScrollSpeed;
 	Aircraft* mPlayerAircraft;
+	Aircraft* mPlayerAircraft2;
 };
 
 #endif // BOOK_WORLD_HPP

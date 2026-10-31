@@ -16,6 +16,7 @@ World::World(sf::RenderWindow& window)
 	, mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 	, mScrollSpeed(-50.f)
 	, mPlayerAircraft(nullptr)
+	, mPlayerAircraft2(nullptr)
 {
 	loadTextures();
 	buildScene();
@@ -29,6 +30,7 @@ void World::update(sf::Time dt)
 	// Scroll the world, reset player velocity
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
 	mPlayerAircraft->setVelocity(0.f, 0.f);
+	mPlayerAircraft2->setVelocity(0.f, 0.f);
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!mCommandQueue.isEmpty())
@@ -81,9 +83,13 @@ void World::buildScene()
 
 	// Add player's aircraft
 	std::unique_ptr<Aircraft> leader(new Aircraft(Aircraft::Eagle, mTextures));
+	std::unique_ptr<Aircraft> leader2(new Aircraft(Aircraft::Raptor, mTextures));
 	mPlayerAircraft = leader.get();
+	mPlayerAircraft2 = leader2.get();
 	mPlayerAircraft->setPosition(mSpawnPosition);
+	mPlayerAircraft2->setPosition(mSpawnPosition);
 	mSceneLayers[Air]->attachChild(std::move(leader));
+	mSceneLayers[Air]->attachChild(std::move(leader2));
 }
 
 void World::adaptPlayerPosition()
@@ -93,11 +99,15 @@ void World::adaptPlayerPosition()
 	const float borderDistance = 40.f;
 
 	sf::Vector2f position = mPlayerAircraft->getPosition();
+	sf::Vector2f position2 = mPlayerAircraft2->getPosition();
 	position.x = std::max(position.x, viewBounds.left + borderDistance);
 	position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
 	position.y = std::max(position.y, viewBounds.top + borderDistance);
 	position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
+	position2.x = position.x - 90.f;
+	position2.y = position.y + 30.f;
 	mPlayerAircraft->setPosition(position);
+	mPlayerAircraft2->setPosition(position2);
 }
 
 void World::adaptPlayerVelocity()
